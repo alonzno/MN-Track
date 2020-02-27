@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Button from '@material-ui/core/Button';
+import FoodTable from './FoodTable.js';
+import FoodForm from './FoodForm.js';
 
 function App() {
   return (
-    <Button variant="contained" color="primary">
-      Hello World
-    </Button>
+    <div>
+      <FoodTable />
+      <FoodForm />
+    </div>
   );
 }
 
