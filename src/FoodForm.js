@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { useState } from 'react';
 
-import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {makeStyles} from '@material-ui/core/Styles';
 import Paper from '@material-ui/core/Paper';
@@ -27,8 +27,19 @@ export default function FoodForm(props) {
   const [carbs, setCarbs] = useState("");
   const [fat, setFat] = useState("");
 
-  function isValidInput() {
-  	return true;
+  function isValidTextField() {
+  	if (isNaN(calories) || isNaN(protein) || isNaN(carbs) || isNaN(fat)) {
+  		alert("Nutrients must be numerical");
+  		return false;
+  	}
+  	else {
+  		return true;
+  	}
+  }
+  function handleClick() {
+  	if (isValidTextField()) {
+  		props.addItem(createData(name, calories, protein, carbs, fat))
+  	}
   }
 
 
@@ -36,15 +47,15 @@ export default function FoodForm(props) {
 
   return (
     <form className={classes.root} noValidate auto-complete="off">
-      <Input id="name" defaultValue="Name" onChange={ e => setName(e.target.value) }/>
-      <Input id="calories" defaultValue="Calories" onChange={ e => setCalories(e.target.value) }/>
-      <Input id="protein" defaultValue="Protein" onChange={ e => setProtein(e.target.value) }/>
-      <Input id="carbs" defaultValue="Carbs" onChange={ e => setCarbs(e.target.value) }/>
-      <Input id="fat" defaultValue="Fat" onChange={ e => setFat(e.target.value) }/>
+      <TextField id="name" label="Name" onChange={ e => setName(e.target.value) }/>
+      <TextField id="calories" label="Calories" onChange={ e => setCalories(e.target.value) }/>
+      <TextField id="protein" label="Protein" onChange={ e => setProtein(e.target.value) }/>
+      <TextField id="carbs" label="Carbs" onChange={ e => setCarbs(e.target.value) }/>
+      <TextField id="fat" label="Fat" onChange={ e => setFat(e.target.value) }/>
       <Button
       	variant="contained"
       	color="primary"
-      	onClick={ () => (props.addItem(createData(name, calories, protein, carbs, fat))) }
+      	onClick={ handleClick }
       	>
       	Add
       </Button>

@@ -34,7 +34,7 @@ function App(props) {
 
   function addNewItem(data) {
     setRows(rows.concat(data));
-    alert(rows);
+    //alert(rows);
   }
 
   return (
