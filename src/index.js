@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,7 +21,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+var ls = require('local-storage');
+
+function loadData() {
+  const data = ls.get("mn-tracker-data");
+  if (data) {
+    return data;
+  }
+  return [];
+}
+
 function App(props) {
+
+
   const classes = useStyles();
   const [rows, setRows] = useState([]);
 
@@ -31,9 +44,13 @@ function App(props) {
     //   createData('Cupcake', 305, 3.7, 67, 4.3),
     //   createData('Gingerbread', 356, 16.0, 49, 3.9),
     // ];
+  useEffect(() => (setRows(loadData())), []);
+
 
   function addNewItem(data) {
     setRows(rows.concat(data));
+    ls.set("mn-tracker-data", rows);
+    alert(ls.get("mn-tracker-data"));
     //alert(rows);
   }
 
