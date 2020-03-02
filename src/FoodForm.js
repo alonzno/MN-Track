@@ -56,6 +56,7 @@ export default function FoodForm(props) {
       <TextField id="fat" label="Fat" onChange={ e => setFat(e.target.value) }/>
       <Button
       	variant="contained"
+      	type="reset"
       	color="primary"
       	onClick={ handleClick }
       	>

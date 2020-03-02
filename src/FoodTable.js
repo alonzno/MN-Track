@@ -70,7 +70,6 @@ export default function FoodTable(props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [selected, setSelected] = React.useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -81,16 +80,16 @@ export default function FoodTable(props) {
     setPage(0);
   };
   const handleSelect = (event, row) => {
-    if (selected === row.hash) {
-      setSelected(0);
+    if (props.selected === row.hash) {
+      props.setSelected(0);
     }
     else {
-      setSelected(row.hash);
+      props.setSelected(row.hash);
     }
   };
 
   return (
-    <Paper className={classes.root} elevations={3} >
+    <Paper className={classes.root} elevations={6} >
       <TableContainer className={classes.container} >
         <Table className={classes.table} stickyHeader aria-label="customized table">
           <TableHead>
@@ -106,7 +105,7 @@ export default function FoodTable(props) {
             {stableSort(props.rows, getComparator('asc', 'name'))
               .map(row => {
 
-                const isSelected = selected === row.hash;
+                const isSelected = props.selected === row.hash;
 
                 return(
                   <StyledTableRow 
