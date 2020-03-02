@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 import FoodTable from './FoodTable.js';
 import FoodForm from './FoodForm.js';
+import DailyTable from './DailyTable.js';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,6 +92,9 @@ function App(props) {
           <Paper className={classes.paper} elevation={3}>
             <FoodForm addItem={addNewItem}/>
           </Paper>
+        </Grid>
+        <Grid item>
+          <DailyTable />
         </Grid>
       </Grid>
     </div>
