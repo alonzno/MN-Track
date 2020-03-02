@@ -1,11 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { useState } from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {makeStyles} from '@material-ui/core/Styles';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,7 +16,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+	const crypto = require('crypto');
+	const hash = crypto.createHash('sha1').update(name).digest('hex');
+  return { name, calories, fat, carbs, protein, hash };
 }
 
 export default function FoodForm(props) {

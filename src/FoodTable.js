@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,12 +23,36 @@ const StyledTableCell = withStyles(theme => ({
 const StyledTableRow = withStyles(theme => ({
   root: {
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default,
+      //backgroundColor: theme.palette.background.default,
     },
   },
 }))(TableRow);
 
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
 
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
 
 const useStyles = makeStyles({
   root: {
@@ -46,6 +70,7 @@ export default function FoodTable(props) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [selected, setSelected] = React.useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -54,6 +79,14 @@ export default function FoodTable(props) {
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+  const handleSelect = (event, row) => {
+    if (selected === row.hash) {
+      setSelected(0);
+    }
+    else {
+      setSelected(row.hash);
+    }
   };
 
   return (
@@ -70,17 +103,28 @@ export default function FoodTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.rows.map(row => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.protein}</StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {stableSort(props.rows, getComparator('asc', 'name'))
+              .map(row => {
+
+                const isSelected = selected === row.hash;
+
+                return(
+                  <StyledTableRow 
+                    key={ row.name } 
+                    onClick={ event => (handleSelect(event, row))}
+                    selected={ isSelected }
+                    >
+                      <StyledTableCell component="th" scope="row">
+                        {row.name}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                      <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                      <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+                      <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                  </StyledTableRow>
+                )
+              })
+            }
           </TableBody>
         </Table>
       </TableContainer>
